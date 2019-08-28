@@ -26,17 +26,24 @@ def chars_provider(pixel_red_values):
             ascii_value = 0
 
 
-def create_image(message: str, filename: str):
-    bits_in_msg: int = len(message) * 8
-    image_width: int = ceil(sqrt(bits_in_msg))
-    pixels = np.random.randint(0, 254, (image_width, image_width, 3), dtype=np.uint8)
-    for i, bit in enumerate(bits_provider(message)):
-        row = i // image_width
-        col = i % image_width
-        pixels[row, col, 0] = pixels[row, col, 0] & ~1 | bit
-    img = Image.fromarray(pixels)
-    img.save(filename)
+def create_image(message: str, input_filename, output_filename: str):
+    img = Image.open(input_filename)
+    pixels = np.array(img)
     img.close()
+    clear_low_order_bits(pixels)
+    for i, bit in enumerate(bits_provider(message)):
+        row = i // pixels.shape[1]
+        col = i % pixels.shape[1]
+        pixels[row, col, 0] = pixels[row, col, 0] & ~1 | bit
+    out_img = Image.fromarray(pixels)
+    out_img.save(output_filename)
+    out_img.close()
+
+
+def clear_low_order_bits(pixels):
+    for row in range(pixels.shape[0]):
+        for col in range(pixels.shape[1]):
+            pixels[row, col, 0] &= ~1
 
 
 def decode_image(filename: str) -> str:

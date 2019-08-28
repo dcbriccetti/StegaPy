@@ -1,4 +1,4 @@
 from stegapy import decode_image
 
-decoded = decode_image('image.png')
+decoded = decode_image('secret-image.png')
 print(decoded)
