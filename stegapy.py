@@ -34,7 +34,7 @@ def create_image(message: str, input_filename, output_filename: str):
     for i, bit in enumerate(bits_provider(message)):
         row = i // pixels.shape[1]
         col = i % pixels.shape[1]
-        pixels[row, col, 0] = pixels[row, col, 0] & ~1 | bit
+        pixels[row, col, 0] |= bit
     out_img = Image.fromarray(pixels)
     out_img.save(output_filename)
     out_img.close()
