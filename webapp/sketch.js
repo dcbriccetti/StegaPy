@@ -8,8 +8,8 @@ function createBits(message) {
   const b = [];
   for (let char of message) {
     const ascii = char.charCodeAt(0);
-    for (let p = 7; p >= 0; --p) {
-      b.push(ascii & 2 ** p ? 1 : 0);
+    for (let powerOf2 = 7; powerOf2 >= 0; --powerOf2) {
+      b.push(ascii & (1 << powerOf2) ? 1 : 0);
     }
   }
   return b;
@@ -29,10 +29,10 @@ function draw() {
   image(img, 0, 0);
   numBitsText.elt.textContent = `Bits: ${numBitsSlider.value()}`;
   if (mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) {
-    const c = img.get(mouseX, mouseY);
-    let  bits = c[0].toString(2);
+    const red = img.get(mouseX, mouseY)[0];
+    let bits = red.toString(2);
     while (bits.length < 8) bits = '0' + bits;
-    colorText.elt.textContent = `Red: ${bits} (${c[0]})`;
+    colorText.elt.textContent = `Red: ${bits} (${red})`;
   }
 }
 
@@ -44,10 +44,10 @@ function update() {
   for (let row = 0; row < img.height; row++) {
     for (let col = 0; col < img.width; col++) {
       let encodedValue = 0;
-      for (let p = numBits - 1; p >= 0; --p) {
+      for (let powerOf2 = numBits - 1; powerOf2 >= 0; --powerOf2) {
         if (bitIndex < bits.length) {
           if (bits[bitIndex++]) {
-            encodedValue |= 2 ** p;
+            encodedValue |= 1 << powerOf2;
           }
         }
       }

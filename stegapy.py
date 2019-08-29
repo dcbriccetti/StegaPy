@@ -1,5 +1,3 @@
-from math import sqrt, ceil
-from random import randint
 import numpy as np
 from PIL import Image
 
@@ -23,6 +21,7 @@ def chars_provider(pixel_red_values):
                 return
 
             yield char
+
             ascii_value = 0
 
 
