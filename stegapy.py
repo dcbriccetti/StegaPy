@@ -4,9 +4,10 @@ from PIL import Image
 
 def bits_provider(message):
     for char in message:
-        ascii_value: int = ord(char)
-        for bit_position in range(7, -1, -1):
-            yield 1 if ascii_value & (1 << bit_position) else 0
+        ascii_value = ord(char)
+        for bit_position in range(8):
+            power = 7 - bit_position
+            yield 1 if ascii_value & (1 << power) else 0
 
 
 def chars_provider(pixel_red_values):

@@ -5,14 +5,15 @@ let colorText;
 let numBitsText;
 
 function createBits(message) {
-  const b = [];
-  for (let char of message) {
-    const ascii = char.charCodeAt(0);
+  const bits = [];
+  for (let i = 0; i < message.length; i++) {
+    const asciiValue = message.charCodeAt(i);
     for (let powerOf2 = 7; powerOf2 >= 0; --powerOf2) {
-      b.push(ascii & (1 << powerOf2) ? 1 : 0);
+      const bitIsSet = asciiValue & (1 << powerOf2);
+      bits.push(bitIsSet ? 1 : 0);
     }
   }
-  return b;
+  return bits;
 }
 
 function setup() {
@@ -25,13 +26,18 @@ function setup() {
   update();
 }
 
+function asBitstring(oneByteNum) {
+  let bits = oneByteNum.toString(2);
+  while (bits.length < 8) bits = '0' + bits;
+  return bits;
+}
+
 function draw() {
   image(img, 0, 0);
   numBitsText.elt.textContent = `Bits: ${numBitsSlider.value()}`;
   if (mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) {
     const red = img.get(mouseX, mouseY)[0];
-    let bits = red.toString(2);
-    while (bits.length < 8) bits = '0' + bits;
+    const bits = asBitstring(red);
     colorText.elt.textContent = `Red: ${bits} (${red})`;
   }
 }
