@@ -1,8 +1,9 @@
+from typing import Iterable
 import numpy as np
 from PIL import Image
 
 
-def bits_provider(message):
+def bits_provider(message) -> Iterable[int]:
     for char in message:
         ascii_value = ord(char)
         for bit_position in range(8):
@@ -10,7 +11,7 @@ def bits_provider(message):
             yield 1 if ascii_value & (1 << power) else 0
 
 
-def chars_provider(pixel_red_values):
+def chars_provider(pixel_red_values) -> Iterable[str]:
     ascii_value = 0
     for i, pixel_red_value in enumerate(pixel_red_values):
         ascii_value_bit_position = 7 - i % 8
@@ -26,7 +27,7 @@ def chars_provider(pixel_red_values):
             ascii_value = 0
 
 
-def create_image(message: str, input_filename, output_filename: str):
+def create_image(message: str, input_filename, output_filename: str) -> None:
     img = Image.open(input_filename)
     pixels = np.array(img)
     img.close()
@@ -40,7 +41,7 @@ def create_image(message: str, input_filename, output_filename: str):
     out_img.close()
 
 
-def clear_low_order_bits(pixels):
+def clear_low_order_bits(pixels) -> None:
     for row in range(pixels.shape[0]):
         for col in range(pixels.shape[1]):
             pixels[row, col, 0] &= ~1
